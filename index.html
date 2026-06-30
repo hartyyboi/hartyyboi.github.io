@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Login</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background: white; color: black; padding: 50px; }
+        #content { display: none; }
+        #typewriter { white-space: pre-wrap; font-size: 1.2em; }
+        input { border: 1px solid black; padding: 5px; }
+        button { border: 1px solid black; background: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Section -->
+    <div id="login-box">
+        <p>Enter access key:</p>
+        <input type="password" id="pwd">
+        <button onclick="checkPassword()">SUBMIT</button>
+        <p id="error" style="color: red; display: none;">INVALID KEY.</p>
+    </div>
+
+    <!-- Hidden Content -->
+    <div id="content">
+        <div id="typewriter"></div>
+        <br>
+        <img src="YOUR_PHOTO_URL.jpg" alt="Us" style="width: 300px; display: none;" id="myImg">
+    </div>
+
+    <script>
+        function checkPassword() {
+            const pass = document.getElementById('pwd').value;
+            if (pass === "yourpasswordhere") {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                startTypewriter();
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function startTypewriter() {
+            const text = "Hey, I just wanted to say...\n\nI love you so much.";
+            const div = document.getElementById('typewriter');
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    div.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                } else {
+                    document.getElementById('myImg').style.display = 'block';
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
