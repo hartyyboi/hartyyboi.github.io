@@ -7,6 +7,7 @@
             height: 100%; 
             margin: 0; 
             padding: 0;
+            overflow-x: hidden;
         }
         body { 
             font-family: 'Courier New', Courier, monospace; 
@@ -14,7 +15,7 @@
             color: black; 
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: center; 
             align-items: center;
             position: relative;
             overflow-y: auto;
@@ -23,6 +24,21 @@
         #login-box { 
             text-align: center; 
             max-width: 90%;
+            z-index: 10;
+        }
+        
+        #dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('love-letter.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0; 
+            transition: opacity 1s;
+            z-index: -1;
         }
         
         #content { 
@@ -34,11 +50,12 @@
             box-sizing: border-box;
             opacity: 0;
             transition: opacity 1s;
-            background: url('love-letter.jpg') no-repeat center center;
-            background-size: cover;
+            background: white; 
             border: 1px solid black; 
             margin-top: 40px;
             margin-bottom: 40px;
+            position: relative;
+            z-index: 5;
         }
         
         #typewriter { 
@@ -89,6 +106,7 @@
             font-size: 0.7em; 
             color: #888; 
             letter-spacing: 1px;
+            z-index: 1;
         }
 
         .reveal-img {
@@ -101,10 +119,18 @@
             transition: opacity 1s;
         }
         
+        /* Game Boy Style Pixel Breathing Animation */
         #flower-bouquet {
             max-width: 250px;
             border: none;
             margin: 20px auto;
+            animation: spriteBounce 0.8s steps(2) infinite;
+        }
+        
+        @keyframes spriteBounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); } 
+            100% { transform: translateY(0); }
         }
         
         #reveal-container {
@@ -116,32 +142,28 @@
 </head>
 <body>
 
-    <!-- Login Section -->
+    <div id="dynamic-bg"></div>
+
     <div id="login-box">
-        
         <div id="special-msg">
             YOU REMEMBERED
             <span id="hint-next">the first place we saw each other</span>
         </div>
-
         <p id="prompt-text">Enter access key:</p>
         <input type="text" id="pwd" autocomplete="off">
         <button onclick="checkPassword()">SUBMIT</button>
-        
         <p id="error" style="color: red; display: none; margin-top: 15px;">INVALID KEY.</p>
         <p id="meetup-hint" style="color: black; display: none; margin-top: 15px; font-weight: bold;">
             Hint: the convenience store for our meetup
         </p>
     </div>
 
-    <!-- Hidden Content Area -->
     <div id="content">
         <div id="typewriter"></div>
         <br>
-        
         <div id="reveal-container">
             <img src="7613682E-F50F-4287-9540-5F8741C2B7B6_1_105_c.jpeg" alt="Us" class="reveal-img" id="us-photo">
-            <img src="Flower.avif" alt="Flower Bouquet" class="reveal-img" id="flower-bouquet">
+            <img src="Flowers.avif" alt="Flower Bouquet" class="reveal-img" id="flower-bouquet">
         </div>
     </div>
 
@@ -168,26 +190,29 @@
             }
 
             if (pass.toLowerCase() === "7/11" || pass === "711") {
-                document.body.style.justifyContent = 'flex-start';
-                
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('footer-hint').style.display = 'none';
-                
-                const contentDiv = document.getElementById('content');
-                contentDiv.style.display = 'block';
-                setTimeout(() => { contentDiv.style.opacity = 1; }, 50);
-                
-                startTypewriter();
+                unlockSequence();
                 return;
             }
 
             mistakeCount++;
             errorDiv.style.display = 'block';
-            
-            // Changed from count >= 2 to count >= 1 to show on the very first mistake
             if (mistakeCount >= 1) {
                 meetupHintDiv.style.display = 'block';
             }
+        }
+
+        function unlockSequence() {
+            document.body.style.justifyContent = 'flex-start';
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('footer-hint').style.display = 'none';
+            
+            const contentDiv = document.getElementById('content');
+            const bgDiv = document.getElementById('dynamic-bg');
+            contentDiv.style.display = 'block';
+            bgDiv.style.opacity = 1; 
+
+            setTimeout(() => { contentDiv.style.opacity = 1; }, 50);
+            startTypewriter();
         }
 
         function startTypewriter() {
@@ -213,14 +238,12 @@
             const flowerBouquet = document.getElementById('flower-bouquet');
             
             container.style.display = 'flex';
-            
             usPhoto.style.display = 'block';
             setTimeout(() => { usPhoto.style.opacity = 1; }, 100);
             
             setTimeout(() => {
                 flowerBouquet.style.display = 'block';
                 setTimeout(() => { flowerBouquet.style.opacity = 1; }, 100);
-                
                 setTimeout(() => {
                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }, 1100);
