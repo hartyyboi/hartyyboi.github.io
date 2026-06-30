@@ -25,7 +25,6 @@
             max-width: 90%;
         }
         
-        /* The letter wrapper gets the custom love-letter background */
         #content { 
             display: none; 
             padding: 40px; 
@@ -37,7 +36,7 @@
             transition: opacity 1s;
             background: url('love-letter.jpg') no-repeat center center;
             background-size: cover;
-            border: 1px solid black; /* Keeps the sketchy border around the container */
+            border: 1px solid black; 
             margin-top: 40px;
             margin-bottom: 40px;
         }
@@ -141,10 +140,7 @@
         <br>
         
         <div id="reveal-container">
-            <!-- Updated Couple Photo Name -->
             <img src="7613682E-F50F-4287-9540-5F8741C2B7B6_1_105_c.jpeg" alt="Us" class="reveal-img" id="us-photo">
-            
-            <!-- Pixel Flower Bouquet -->
             <img src="Flower.avif" alt="Flower Bouquet" class="reveal-img" id="flower-bouquet">
         </div>
     </div>
@@ -188,7 +184,8 @@
             mistakeCount++;
             errorDiv.style.display = 'block';
             
-            if (mistakeCount >= 2) {
+            // Changed from count >= 2 to count >= 1 to show on the very first mistake
+            if (mistakeCount >= 1) {
                 meetupHintDiv.style.display = 'block';
             }
         }
