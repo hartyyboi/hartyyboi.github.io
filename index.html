@@ -3,39 +3,157 @@
 <head>
     <title>System Login</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: white; color: black; padding: 50px; }
-        #content { display: none; }
-        #typewriter { white-space: pre-wrap; font-size: 1.2em; }
-        input { border: 1px solid black; padding: 5px; }
-        button { border: 1px solid black; background: white; cursor: pointer; }
+        /* Force everything to center on the screen */
+        html, body { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0;
+        }
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background: white; 
+            color: black; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #login-box { 
+            text-align: center; 
+            max-width: 90%;
+        }
+        
+        #content { 
+            display: none; 
+            padding: 20px; 
+            text-align: left; 
+            max-width: 600px; 
+        }
+        
+        #typewriter { 
+            white-space: pre-wrap; 
+            font-size: 1.2em; 
+        }
+        
+        input { 
+            border: 1px solid black; 
+            padding: 5px; 
+            text-align: center;
+            font-family: inherit;
+        }
+        
+        button { 
+            border: 1px solid black; 
+            background: white; 
+            cursor: pointer; 
+            padding: 5px 10px;
+            font-family: inherit;
+        }
+
+        /* The big bait reveal text */
+        #special-msg {
+            display: none;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: blink 1s infinite alternate;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        #hint-next {
+            font-size: 0.5em;
+            font-weight: normal;
+            margin-top: 10px;
+            display: block;
+            color: #333;
+        }
+
+        /* Bottom fine print hint */
+        .fine-print { 
+            position: absolute; 
+            bottom: 15px; 
+            font-size: 0.7em; 
+            color: #888; 
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
     <!-- Login Section -->
     <div id="login-box">
-        <p>Enter access key:</p>
-        <input type="password" id="pwd">
+        
+        <!-- Big bait alert triggered by the anniversary date -->
+        <div id="special-msg">
+            YOU REMEMBERED
+            <span id="hint-next">the first place we saw each other</span>
+        </div>
+
+        <p id="prompt-text">Enter access key:</p>
+        <input type="text" id="pwd" autocomplete="off">
         <button onclick="checkPassword()">SUBMIT</button>
-        <p id="error" style="color: red; display: none;">INVALID KEY.</p>
+        
+        <!-- Error messages -->
+        <p id="error" style="color: red; display: none; margin-top: 15px;">INVALID KEY.</p>
+        <p id="meetup-hint" style="color: black; display: none; margin-top: 15px; font-weight: bold;">
+            Hint: the convenience store for our meetup
+        </p>
     </div>
 
-    <!-- Hidden Content -->
+    <!-- Hidden Content (Letter & Photo) -->
     <div id="content">
         <div id="typewriter"></div>
         <br>
-        <img src="BF80DF49-FE33-4FAB-9260-F15E35B91269_1_105_c.jpeg" alt="Us" style="width: 300px; display: none;" id="myImg">
+        <img src="us.jpg" alt="Us" style="width: 100%; max-width: 400px; display: none; margin-top: 20px;" id="myImg">
     </div>
 
+    <!-- Fine print at the very bottom -->
+    <div id="footer-hint" class="fine-print">hint our date</div>
+
     <script>
+        let mistakeCount = 0;
+
         function checkPassword() {
-            const pass = document.getElementById('pwd').value;
-            if (pass === "7/11") {
+            const pass = document.getElementById('pwd').value.trim();
+            const errorDiv = document.getElementById('error');
+            const meetupHintDiv = document.getElementById('meetup-hint');
+            const specialDiv = document.getElementById('special-msg');
+            const promptText = document.getElementById('prompt-text');
+
+            // Hide normal error when submitting again
+            errorDiv.style.display = 'none';
+
+            // 1. Check for the bait date password
+            if (pass === "12/05/2025" || pass === "12052025") {
+                specialDiv.style.display = 'block';
+                promptText.innerText = "Enter verification key:";
+                document.getElementById('pwd').value = ""; // Clear input for next try
+                meetupHintDiv.style.display = 'none'; // Hide mistake hint if showing
+                return;
+            }
+
+            // 2. Check for the real password
+            if (pass.toLowerCase() === "7/11" || pass === "711") {
                 document.getElementById('login-box').style.display = 'none';
+                document.getElementById('footer-hint').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
                 startTypewriter();
-            } else {
-                document.getElementById('error').style.display = 'block';
+                return;
+            }
+
+            // 3. Handling incorrect inputs
+            mistakeCount++;
+            errorDiv.style.display = 'block';
+            
+            if (mistakeCount >= 2) {
+                meetupHintDiv.style.display = 'block';
             }
         }
 
