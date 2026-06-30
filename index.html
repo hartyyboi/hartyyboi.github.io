@@ -3,7 +3,6 @@
 <head>
     <title>System Login</title>
     <style>
-        /* Force everything to center on the screen */
         html, body { 
             height: 100%; 
             margin: 0; 
@@ -18,7 +17,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
         }
         
         #login-box { 
@@ -26,16 +25,27 @@
             max-width: 90%;
         }
         
+        /* The letter wrapper gets the custom love-letter background */
         #content { 
             display: none; 
-            padding: 20px; 
+            padding: 40px; 
             text-align: left; 
             max-width: 600px; 
+            width: 100%;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 1s;
+            background: url('love-letter.jpg') no-repeat center center;
+            background-size: cover;
+            border: 1px solid black; /* Keeps the sketchy border around the container */
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
         
         #typewriter { 
             white-space: pre-wrap; 
-            font-size: 1.2em; 
+            font-size: 1.1em; 
+            line-height: 1.6;
         }
         
         input { 
@@ -53,7 +63,6 @@
             font-family: inherit;
         }
 
-        /* The big bait reveal text */
         #special-msg {
             display: none;
             font-size: 2.5em;
@@ -75,13 +84,34 @@
             color: #333;
         }
 
-        /* Bottom fine print hint */
         .fine-print { 
             position: absolute; 
             bottom: 15px; 
             font-size: 0.7em; 
             color: #888; 
             letter-spacing: 1px;
+        }
+
+        .reveal-img {
+            display: none;
+            width: 100%; 
+            max-width: 450px; 
+            margin: 30px auto 10px;
+            border: 1px solid black;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        
+        #flower-bouquet {
+            max-width: 250px;
+            border: none;
+            margin: 20px auto;
+        }
+        
+        #reveal-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 </head>
@@ -90,7 +120,6 @@
     <!-- Login Section -->
     <div id="login-box">
         
-        <!-- Big bait alert triggered by the anniversary date -->
         <div id="special-msg">
             YOU REMEMBERED
             <span id="hint-next">the first place we saw each other</span>
@@ -100,21 +129,26 @@
         <input type="text" id="pwd" autocomplete="off">
         <button onclick="checkPassword()">SUBMIT</button>
         
-        <!-- Error messages -->
         <p id="error" style="color: red; display: none; margin-top: 15px;">INVALID KEY.</p>
         <p id="meetup-hint" style="color: black; display: none; margin-top: 15px; font-weight: bold;">
             Hint: the convenience store for our meetup
         </p>
     </div>
 
-    <!-- Hidden Content (Letter & Photo) -->
+    <!-- Hidden Content Area -->
     <div id="content">
         <div id="typewriter"></div>
         <br>
-        <img src="BF80DF49-FE33-4FAB-9260-F15E35B91269_1_105_c.jpeg" alt="Us" style="width: 100%; max-width: 400px; display: none; margin-top: 20px;" id="myImg">
+        
+        <div id="reveal-container">
+            <!-- Updated Couple Photo Name -->
+            <img src="7613682E-F50F-4287-9540-5F8741C2B7B6_1_105_c.jpeg" alt="Us" class="reveal-img" id="us-photo">
+            
+            <!-- Pixel Flower Bouquet -->
+            <img src="Flower.avif" alt="Flower Bouquet" class="reveal-img" id="flower-bouquet">
+        </div>
     </div>
 
-    <!-- Fine print at the very bottom -->
     <div id="footer-hint" class="fine-print">hint our date</div>
 
     <script>
@@ -127,28 +161,30 @@
             const specialDiv = document.getElementById('special-msg');
             const promptText = document.getElementById('prompt-text');
 
-            // Hide normal error when submitting again
             errorDiv.style.display = 'none';
 
-            // 1. Check for the bait date password
             if (pass === "12/05/2025" || pass === "12052025") {
                 specialDiv.style.display = 'block';
                 promptText.innerText = "Enter verification key:";
-                document.getElementById('pwd').value = ""; // Clear input for next try
-                meetupHintDiv.style.display = 'none'; // Hide mistake hint if showing
+                document.getElementById('pwd').value = ""; 
+                meetupHintDiv.style.display = 'none'; 
                 return;
             }
 
-            // 2. Check for the real password
             if (pass.toLowerCase() === "7/11" || pass === "711") {
+                document.body.style.justifyContent = 'flex-start';
+                
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('footer-hint').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
+                
+                const contentDiv = document.getElementById('content');
+                contentDiv.style.display = 'block';
+                setTimeout(() => { contentDiv.style.opacity = 1; }, 50);
+                
                 startTypewriter();
                 return;
             }
 
-            // 3. Handling incorrect inputs
             mistakeCount++;
             errorDiv.style.display = 'block';
             
@@ -158,19 +194,40 @@
         }
 
         function startTypewriter() {
-            const text = "Hey, I just wanted to say...\n\nI love you so much.";
+            const text = "My dearest Keano,\n\ni have written this letter as an explanation, chz\n\ni really wanted to started start this letter as natural as possible. I know “SORRY” is more said than i Love you, which sums up my shortcomings as your boyfriend. i didn’t not write this as an apology letter but rather a “JUST BECAUSE LETTER”. I have said it enough for you to really appreciate it but i wanted you to know that I REALLY APPRECIATE YOU everyday. I may have a hard time being expressive to you as i am trying my best to not weird you out in anyway. actually i just made this JUST BECAUSE LETTER as my way of keeping up to that level you gave me once and was never got appreciation it deserved. I wanted to recreated that but found many websites to be common, which I was not satisfied with it. I built this custom site as a way to say “you brought the colors that were once stripped out, you replaced the once dull things to something new and exciting, you made me the happiest person and I hope I did that the same to you”. i hope you’re not offended of how basic this looks….\n\nI LOVE YOU MY BABY!!! \n\nHAPPY ADVANCE MONTHSARY <3";
+            
             const div = document.getElementById('typewriter');
             let i = 0;
             function type() {
                 if (i < text.length) {
                     div.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(type, 100);
+                    setTimeout(type, 45); 
                 } else {
-                    document.getElementById('myImg').style.display = 'block';
+                    revealImages();
                 }
             }
             type();
+        }
+        
+        function revealImages() {
+            const container = document.getElementById('reveal-container');
+            const usPhoto = document.getElementById('us-photo');
+            const flowerBouquet = document.getElementById('flower-bouquet');
+            
+            container.style.display = 'flex';
+            
+            usPhoto.style.display = 'block';
+            setTimeout(() => { usPhoto.style.opacity = 1; }, 100);
+            
+            setTimeout(() => {
+                flowerBouquet.style.display = 'block';
+                setTimeout(() => { flowerBouquet.style.opacity = 1; }, 100);
+                
+                setTimeout(() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 1100);
+            }, 1000);
         }
     </script>
 </body>
